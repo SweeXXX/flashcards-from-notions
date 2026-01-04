@@ -27,6 +27,19 @@ const saveDeckBtn = document.getElementById('saveDeckBtn');
 const cancelDeckBtn = document.getElementById('cancelDeckBtn');
 const deleteDeckBtn = document.getElementById('deleteDeckBtn');
 
+// GitHub sync elements
+const githubSyncBtn = document.getElementById('githubSyncBtn');
+const githubImportBtn = document.getElementById('githubImportBtn');
+const githubModal = document.getElementById('githubModal');
+const githubTokenInput = document.getElementById('githubTokenInput');
+const githubRepoInput = document.getElementById('githubRepoInput');
+const githubBranchInput = document.getElementById('githubBranchInput');
+const testGithubBtn = document.getElementById('testGithubBtn');
+const syncGithubBtn = document.getElementById('syncGithubBtn');
+const saveGithubBtn = document.getElementById('saveGithubBtn');
+const cancelGithubBtn = document.getElementById('cancelGithubBtn');
+const githubStatus = document.getElementById('githubStatus');
+
 let currentTopicId = null;
 let cards = [];
 let index = 0;
@@ -34,6 +47,11 @@ let showEditor = true;
 let studyAllDecks = false;
 let editingTopicId = null;
 const srsCache = new Map(); // cardId -> { cardId, level, nextDue }
+
+// GitHub sync settings
+let githubToken = localStorage.getItem('githubToken') || '';
+let githubRepo = localStorage.getItem('githubRepo') || '';
+let githubBranch = localStorage.getItem('githubBranch') || 'main';
 
 async function renderTopics(items) {
   topicsList.innerHTML = '';
@@ -139,6 +157,7 @@ saveBtn.onclick = async () => {
   await updateCard(c);
   cards[index] = c;
   await updateCardView();
+  await syncToGithubIfEnabled();
 };
 
 importBtn.onclick = () => fileInput.click();
@@ -203,6 +222,7 @@ saveDeckBtn.onclick = async (e) => {
   deckModal.classList.add('hidden');
   editingTopicId = null;
   await load();
+  await syncToGithubIfEnabled();
 };
 
 cancelDeckBtn.onclick = () => {
@@ -242,6 +262,7 @@ deleteDeckBtn.onclick = async () => {
   if (confirm('Are you sure you want to delete this deck? All cards will be deleted.')) {
     await deleteTopic(editingTopicId);
     deckModal.classList.add('hidden');
+    await syncToGithubIfEnabled();
     if (currentTopicId === editingTopicId) {
       currentTopicId = null;
       cards = [];
@@ -271,6 +292,7 @@ function deleteDeckConfirm(topicId) {
   if (confirm('Are you sure you want to delete this deck? All cards will be deleted.')) {
     (async () => {
       await deleteTopic(topicId);
+      await syncToGithubIfEnabled();
       if (currentTopicId === topicId) {
         currentTopicId = null;
         cards = [];
@@ -302,7 +324,8 @@ async function importToDeck(topicId) {
     
     // Assign all cards to the target deck
     await addCardsToTopic(cardsToImport, topicId);
-    
+    await syncToGithubIfEnabled();
+
     // If we're currently viewing this deck, reload it
     if (currentTopicId === topicId) {
       await loadTopic(topicId);
@@ -333,6 +356,95 @@ studyAllMode.onchange = async (e) => {
     }
   }
 };
+
+// GitHub sync event handlers
+if (githubSyncBtn) {
+  githubSyncBtn.onclick = () => {
+    githubTokenInput.value = githubToken;
+    githubRepoInput.value = githubRepo;
+    githubBranchInput.value = githubBranch;
+    githubStatus.textContent = '';
+    githubModal.classList.remove('hidden');
+  };
+}
+
+if (githubImportBtn) {
+  githubImportBtn.onclick = async () => {
+    if (!confirm('This will replace all local data with data from GitHub. Continue?')) {
+      return;
+    }
+
+    try {
+      await importDataFromGithub();
+      await load(); // Refresh the UI
+      alert('✅ Data imported from GitHub successfully!');
+    } catch (error) {
+      alert(`❌ Import failed: ${error.message}`);
+    }
+  };
+}
+
+if (testGithubBtn) {
+  testGithubBtn.onclick = async () => {
+    githubStatus.textContent = 'Testing connection...';
+    try {
+      const success = await testGithubConnection();
+      if (success) {
+        githubStatus.textContent = '✅ Connection successful!';
+        githubStatus.style.color = '#4CAF50';
+      } else {
+        githubStatus.textContent = '❌ Connection failed. Check your settings.';
+        githubStatus.style.color = '#f44336';
+      }
+    } catch (error) {
+      githubStatus.textContent = `❌ Error: ${error.message}`;
+      githubStatus.style.color = '#f44336';
+    }
+  };
+}
+
+if (syncGithubBtn) {
+  syncGithubBtn.onclick = async () => {
+    githubStatus.textContent = 'Syncing data...';
+    try {
+      await exportDataToGithub();
+      githubStatus.textContent = '✅ Data exported to GitHub!';
+      githubStatus.style.color = '#4CAF50';
+    } catch (error) {
+      githubStatus.textContent = `❌ Sync failed: ${error.message}`;
+      githubStatus.style.color = '#f44336';
+    }
+  };
+}
+
+if (saveGithubBtn) {
+  saveGithubBtn.onclick = () => {
+    githubToken = githubTokenInput.value.trim();
+    githubRepo = githubRepoInput.value.trim();
+    githubBranch = githubBranchInput.value.trim() || 'main';
+
+    localStorage.setItem('githubToken', githubToken);
+    localStorage.setItem('githubRepo', githubRepo);
+    localStorage.setItem('githubBranch', githubBranch);
+
+    githubModal.classList.add('hidden');
+  };
+}
+
+if (cancelGithubBtn) {
+  cancelGithubBtn.onclick = () => {
+    githubModal.classList.add('hidden');
+  };
+}
+
+// Close modal when clicking outside
+if (githubModal) {
+  githubModal.onclick = (e) => {
+    if (e.target === githubModal) {
+      githubModal.classList.add('hidden');
+    }
+  };
+}
 
 async function load() {
   const items = await listTopics();
@@ -385,6 +497,118 @@ async function loadAllDecks() {
   // Refresh topic list to update active state
   const items = await listTopics();
   await renderTopics(items);
+}
+
+// GitHub API functions
+async function githubRequest(endpoint, options = {}) {
+  if (!githubToken || !githubRepo) {
+    throw new Error('GitHub settings not configured');
+  }
+
+  const url = `https://api.github.com/repos/${githubRepo}${endpoint}`;
+  const headers = {
+    'Authorization': `token ${githubToken}`,
+    'Accept': 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json',
+    ...options.headers
+  };
+
+  const response = await fetch(url, { ...options, headers });
+  if (!response.ok) {
+    throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+  }
+  return response.json();
+}
+
+async function getFileFromGithub(path) {
+  try {
+    const data = await githubRequest(`/contents/${path}?ref=${githubBranch}`);
+    return JSON.parse(atob(data.content));
+  } catch (error) {
+    if (error.message.includes('404')) {
+      return null; // File doesn't exist
+    }
+    throw error;
+  }
+}
+
+async function saveFileToGithub(path, content, message = 'Update flashcards data') {
+  const jsonContent = JSON.stringify(content, null, 2);
+  const encodedContent = btoa(unescape(encodeURIComponent(jsonContent)));
+
+  // Try to get existing file for SHA
+  let sha = null;
+  try {
+    const existingFile = await githubRequest(`/contents/${path}?ref=${githubBranch}`);
+    sha = existingFile.sha;
+  } catch (error) {
+    // File doesn't exist, that's fine
+  }
+
+  const body = {
+    message,
+    content: encodedContent,
+    branch: githubBranch,
+    ...(sha && { sha })
+  };
+
+  return githubRequest(`/contents/${path}`, {
+    method: 'PUT',
+    body: JSON.stringify(body)
+  });
+}
+
+async function testGithubConnection() {
+  try {
+    await githubRequest('/contents');
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+async function exportDataToGithub() {
+  const topics = await listTopics();
+  const cards = await getAllCards();
+  const srs = await getAllSrs();
+
+  const data = {
+    topics,
+    cards,
+    srs,
+    exportedAt: new Date().toISOString()
+  };
+
+  await saveFileToGithub('flashcards-data.json', data, 'Export flashcards data');
+  return data;
+}
+
+async function importDataFromGithub() {
+  const data = await getFileFromGithub('flashcards-data.json');
+  if (!data) {
+    throw new Error('No data found on GitHub');
+  }
+
+  // Import data to local database
+  await clearAll();
+  await importJson(data);
+
+  return data;
+}
+
+// Auto-sync to GitHub if configured
+async function syncToGithubIfEnabled() {
+  if (!githubToken || !githubRepo) {
+    return; // GitHub not configured
+  }
+
+  try {
+    await exportDataToGithub();
+    console.log('✅ Auto-synced to GitHub');
+  } catch (error) {
+    console.error('❌ Auto-sync to GitHub failed:', error);
+    // Don't show alert for auto-sync failures to avoid interrupting user
+  }
 }
 
 function shuffle(arr) { arr.sort(() => Math.random() - 0.5); }
@@ -458,6 +682,7 @@ async function scheduleSrs(cardId, wasCorrect) {
   record.nextDue = now + days * 24 * 60 * 60 * 1000;
   await upsertSrs(record);
   srsCache.set(cardId, { ...record });
+  await syncToGithubIfEnabled();
 }
 
 // Выбор следующей карточки: приоритет карточкам с истёкшим nextDue

@@ -11,6 +11,7 @@
       <div class="header">
         <h1>Math Flashcards</h1>
         <div class="actions">
+          <button id="githubSyncBtn" title="GitHub Sync">🔄 GitHub</button>
           <button id="importBtn">Импорт JSON</button>
           <input type="file" id="fileInput" accept="application/json" hidden />
           <button id="resetBtn" title="Очистить все данные">Сброс</button>
@@ -63,6 +64,25 @@
           <button id="cancelDeckBtn">Cancel</button>
           <button id="deleteDeckBtn" class="btn-danger hidden">Delete</button>
         </div>
+      </div>
+    </div>
+
+    <div id="githubModal" class="modal hidden">
+      <div class="modal-content">
+        <h3>GitHub Sync Settings</h3>
+        <div style="margin-bottom: 16px; font-size: 14px; color: #666;">
+          Sync your flashcards data with a GitHub repository. Create a Personal Access Token at <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a>
+        </div>
+        <input type="text" id="githubTokenInput" placeholder="GitHub Personal Access Token" />
+        <input type="text" id="githubRepoInput" placeholder="Repository (owner/repo)" />
+        <input type="text" id="githubBranchInput" placeholder="Branch (default: main)" value="main" />
+        <div class="modal-actions">
+          <button id="testGithubBtn">Test Connection</button>
+          <button id="syncGithubBtn">Sync Now</button>
+          <button id="saveGithubBtn">Save Settings</button>
+          <button id="cancelGithubBtn">Cancel</button>
+        </div>
+        <div id="githubStatus" style="margin-top: 12px; font-size: 12px; color: #666;"></div>
       </div>
     </div>
     <script type="module" src="./app.js"></script>
