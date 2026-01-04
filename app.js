@@ -1,4 +1,4 @@
-import { listTopics, listCardsByTopic, updateCard, seedIfEmpty, clearAll, importJson, getSrs, upsertSrs, createTopic, updateTopic, deleteTopic, getAllCards, getAllSrs } from './db.js';
+import { listTopics, listCardsByTopic, updateCard, seedIfEmpty, clearAll, importJson, getSrs, upsertSrs, createTopic, updateTopic, deleteTopic, getAllCards, getAllSrs, addCardsToTopic } from './db.js';
 
 // Авто-источник: публичная страница Notion с билетами пользователя
 const DEFAULT_NOTION_URL = 'https://pollen-jewel-bec.notion.site/1-c-8ec04abc8dba4cebbad42125cde3dba9';
@@ -15,8 +15,7 @@ const saveBtn = document.getElementById('saveCard');
 const importBtn = document.getElementById('importBtn');
 const fileInput = document.getElementById('fileInput');
 const resetBtn = document.getElementById('resetBtn');
-const urlInput = document.getElementById('urlInput');
-const importUrlBtn = document.getElementById('importUrlBtn');
+// Removed global import - now each deck has its own import button
 const createDeckBtn = document.getElementById('createDeckBtn');
 const studyAllMode = document.getElementById('studyAllMode');
 const deckInfo = document.getElementById('deckInfo');
@@ -40,17 +39,21 @@ async function renderTopics(items) {
   topicsList.innerHTML = '';
   const now = Date.now();
   
-  for (const t of items) {
+  // Batch load all statistics in parallel to avoid lag
+  const statsPromises = items.map(async (t) => {
+    const deckCards = await listCardsByTopic(t.id);
+    const deckSrs = await Promise.all(deckCards.map(c => getSrs(c.id)));
+    const dueCount = deckSrs.filter(srs => !srs || srs.nextDue <= now).length;
+    return { topic: t, totalCount: deckCards.length, dueCount };
+  });
+  
+  const stats = await Promise.all(statsPromises);
+  
+  stats.forEach(({ topic: t, totalCount, dueCount }) => {
     const li = document.createElement('li');
     if (currentTopicId === t.id && !studyAllDecks) {
       li.classList.add('active');
     }
-    
-    // Get statistics for this deck
-    const deckCards = await listCardsByTopic(t.id);
-    const deckSrs = await Promise.all(deckCards.map(c => getSrs(c.id)));
-    const dueCount = deckSrs.filter(srs => !srs || srs.nextDue <= now).length;
-    const totalCount = deckCards.length;
     
     li.innerHTML = `
       <div class="topic-header">
@@ -63,6 +66,7 @@ async function renderTopics(items) {
           </div>
         </div>
         <div class="topic-actions" onclick="event.stopPropagation()">
+          <button onclick="importToDeck('${t.id}')" title="Import from Notion">📥</button>
           <button onclick="editDeck('${t.id}')" title="Edit">✏️</button>
           <button onclick="deleteDeckConfirm('${t.id}')" title="Delete">🗑️</button>
         </div>
@@ -76,8 +80,7 @@ async function renderTopics(items) {
     };
     
     topicsList.appendChild(li);
-  }
-  
+  });
 }
 
 async function updateCardView() {
@@ -150,17 +153,7 @@ resetBtn.onclick = async () => {
   await load();
 };
 
-importUrlBtn.onclick = async () => {
-  const url = urlInput.value.trim();
-  if (!url) return;
-  try {
-    await clearAll();
-    const json = await fetchNotionPublicPage(url);
-    if (!json) return;
-    await importJson(json);
-    await load();
-  } catch {}
-};
+// Removed global import - now each deck has its own import button
 
 // Deck management
 createDeckBtn.onclick = () => {
@@ -173,7 +166,9 @@ createDeckBtn.onclick = () => {
   deckNameInput.focus();
 };
 
-saveDeckBtn.onclick = async () => {
+saveDeckBtn.onclick = async (e) => {
+  e.preventDefault();
+  e.stopPropagation();
   const name = deckNameInput.value.trim();
   if (!name) return;
   
@@ -195,18 +190,29 @@ saveDeckBtn.onclick = async () => {
   }
   
   deckModal.classList.add('hidden');
+  editingTopicId = null;
   await load();
 };
 
 cancelDeckBtn.onclick = () => {
   deckModal.classList.add('hidden');
+  editingTopicId = null;
 };
 
 deckModal.onclick = (e) => {
   if (e.target === deckModal) {
     deckModal.classList.add('hidden');
+    editingTopicId = null;
   }
 };
+
+// Prevent modal content clicks from closing modal
+const modalContent = document.querySelector('.modal-content');
+if (modalContent) {
+  modalContent.onclick = (e) => {
+    e.stopPropagation();
+  };
+}
 
 deleteDeckBtn.onclick = async () => {
   if (!editingTopicId) return;
@@ -252,9 +258,44 @@ function deleteDeckConfirm(topicId) {
   }
 }
 
+async function importToDeck(topicId) {
+  const url = prompt('Enter Notion page URL to import:');
+  if (!url || !url.trim()) return;
+  
+  try {
+    const json = await fetchNotionPublicPage(url.trim());
+    if (!json) {
+      alert('Failed to import from Notion. Please check the URL.');
+      return;
+    }
+    
+    // Import only to this specific deck - assign all cards to this topic
+    const cardsToImport = json.cards || [];
+    
+    if (cardsToImport.length === 0) {
+      alert('No cards found to import.');
+      return;
+    }
+    
+    // Assign all cards to the target deck
+    await addCardsToTopic(cardsToImport, topicId);
+    
+    // If we're currently viewing this deck, reload it
+    if (currentTopicId === topicId) {
+      await loadTopic(topicId);
+    }
+    await load(); // Refresh deck list
+    alert(`Imported ${cardsToImport.length} cards to this deck.`);
+  } catch (error) {
+    console.error('Import error:', error);
+    alert('Error importing from Notion. Please try again.');
+  }
+}
+
 // Make functions available globally for inline onclick handlers
 window.editDeck = editDeck;
 window.deleteDeckConfirm = deleteDeckConfirm;
+window.importToDeck = importToDeck;
 
 studyAllMode.onchange = async (e) => {
   studyAllDecks = e.target.checked;

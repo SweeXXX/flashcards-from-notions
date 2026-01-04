@@ -164,4 +164,13 @@ export async function getAllSrs() {
   }));
 }
 
+export async function addCardsToTopic(cards, topicId) {
+  return tx(STORE_CARDS, 'readwrite', (s) => {
+    cards.forEach(card => {
+      const cardWithTopic = { ...card, topic_id: topicId };
+      s.put(cardWithTopic);
+    });
+  });
+}
+
 
