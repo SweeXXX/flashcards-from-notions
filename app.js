@@ -29,7 +29,7 @@ const deleteDeckBtn = document.getElementById('deleteDeckBtn');
 
 // GitHub sync elements
 const githubSyncBtn = document.getElementById('githubSyncBtn');
-const githubImportBtn = document.getElementById('githubImportBtn');
+const githubRestoreBtn = document.getElementById('githubRestoreBtn');
 const githubModal = document.getElementById('githubModal');
 const githubTokenInput = document.getElementById('githubTokenInput');
 const githubRepoInput = document.getElementById('githubRepoInput');
@@ -52,6 +52,44 @@ const srsCache = new Map(); // cardId -> { cardId, level, nextDue }
 let githubToken = localStorage.getItem('githubToken') || '';
 let githubRepo = localStorage.getItem('githubRepo') || '';
 let githubBranch = localStorage.getItem('githubBranch') || 'main';
+
+// Backup settings for recovery
+let githubSettingsBackup = JSON.parse(localStorage.getItem('githubSettingsBackup') || 'null');
+
+// Function to backup GitHub settings
+function backupGithubSettings() {
+  if (githubToken || githubRepo) {
+    const settings = {
+      token: githubToken,
+      repo: githubRepo,
+      branch: githubBranch,
+      timestamp: Date.now()
+    };
+    localStorage.setItem('githubSettingsBackup', JSON.stringify(settings));
+    githubSettingsBackup = settings;
+  }
+}
+
+// Function to restore GitHub settings from backup
+function restoreGithubSettings() {
+  if (githubSettingsBackup && confirm('Найдены сохраненные настройки GitHub. Восстановить их?')) {
+    githubToken = githubSettingsBackup.token;
+    githubRepo = githubSettingsBackup.repo;
+    githubBranch = githubSettingsBackup.branch;
+    localStorage.setItem('githubToken', githubToken);
+    localStorage.setItem('githubRepo', githubRepo);
+    localStorage.setItem('githubBranch', githubBranch);
+
+    // Hide restore button after successful restore
+    if (githubRestoreBtn) {
+      githubRestoreBtn.style.display = 'none';
+    }
+
+    alert('✅ Настройки GitHub восстановлены!');
+    return true;
+  }
+  return false;
+}
 
 async function renderTopics(items) {
   topicsList.innerHTML = '';
@@ -368,6 +406,12 @@ if (githubSyncBtn) {
   };
 }
 
+if (githubRestoreBtn) {
+  githubRestoreBtn.onclick = () => {
+    restoreGithubSettings();
+  };
+}
+
 if (githubImportBtn) {
   githubImportBtn.onclick = async () => {
     if (!confirm('This will replace all local data with data from GitHub. Continue?')) {
@@ -426,6 +470,9 @@ if (saveGithubBtn) {
     localStorage.setItem('githubToken', githubToken);
     localStorage.setItem('githubRepo', githubRepo);
     localStorage.setItem('githubBranch', githubBranch);
+
+    // Backup settings for recovery
+    backupGithubSettings();
 
     githubModal.classList.add('hidden');
   };
@@ -619,10 +666,15 @@ function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;'
   if (deckModal) {
     deckModal.classList.add('hidden');
   }
-  
+
+  // Show restore button if backup exists but current settings are empty
+  if (githubSettingsBackup && (!githubToken || !githubRepo) && githubRestoreBtn) {
+    githubRestoreBtn.style.display = 'inline-block';
+  }
+
   // Проверяем, есть ли уже данные в БД
   const existingTopics = await listTopics();
-  
+
   // Если БД пустая - импортируем билеты с Notion (silently, no prompts)
   if (existingTopics.length === 0) {
     try {
@@ -632,7 +684,7 @@ function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;'
       console.log('Ошибка импорта из Notion:', error);
     }
   }
-  
+
   await load();
 })();
 
