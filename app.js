@@ -37,19 +37,9 @@ const srsCache = new Map(); // cardId -> { cardId, level, nextDue }
 
 async function renderTopics(items) {
   topicsList.innerHTML = '';
-  const now = Date.now();
   
-  // Batch load all statistics in parallel to avoid lag
-  const statsPromises = items.map(async (t) => {
-    const deckCards = await listCardsByTopic(t.id);
-    const deckSrs = await Promise.all(deckCards.map(c => getSrs(c.id)));
-    const dueCount = deckSrs.filter(srs => !srs || srs.nextDue <= now).length;
-    return { topic: t, totalCount: deckCards.length, dueCount };
-  });
-  
-  const stats = await Promise.all(statsPromises);
-  
-  stats.forEach(({ topic: t, totalCount, dueCount }) => {
+  // Render decks immediately without loading stats to avoid lag
+  items.forEach((t) => {
     const li = document.createElement('li');
     if (currentTopicId === t.id && !studyAllDecks) {
       li.classList.add('active');
@@ -60,9 +50,8 @@ async function renderTopics(items) {
         <div style="flex: 1;">
           <div class="topic-name">${escapeHtml(t.name)}</div>
           ${t.description ? `<div class="topic-desc">${escapeHtml(t.description)}</div>` : ''}
-          <div class="topic-stats">
-            <span>${totalCount} cards</span>
-            <span>${dueCount} due</span>
+          <div class="topic-stats" data-topic-id="${t.id}">
+            <span>Loading...</span>
           </div>
         </div>
         <div class="topic-actions" onclick="event.stopPropagation()">
@@ -76,11 +65,31 @@ async function renderTopics(items) {
     li.onclick = async () => {
       studyAllDecks = false;
       studyAllMode.checked = false;
-      await loadTopic(t.id);
+      await loadTopic(t.id, false);
     };
     
     topicsList.appendChild(li);
   });
+  
+  // Load statistics in the background after rendering to avoid blocking
+  setTimeout(async () => {
+    const now = Date.now();
+    for (const t of items) {
+      try {
+        const deckCards = await listCardsByTopic(t.id);
+        const deckSrs = await Promise.all(deckCards.map(c => getSrs(c.id)));
+        const dueCount = deckSrs.filter(srs => !srs || srs.nextDue <= now).length;
+        const totalCount = deckCards.length;
+        
+        const statsEl = document.querySelector(`.topic-stats[data-topic-id="${t.id}"]`);
+        if (statsEl) {
+          statsEl.innerHTML = `<span>${totalCount} cards</span><span>${dueCount} due</span>`;
+        }
+      } catch (error) {
+        console.error('Error loading stats for deck:', t.id, error);
+      }
+    }
+  }, 0);
 }
 
 async function updateCardView() {
@@ -156,15 +165,17 @@ resetBtn.onclick = async () => {
 // Removed global import - now each deck has its own import button
 
 // Deck management
-createDeckBtn.onclick = () => {
-  editingTopicId = null;
-  modalTitle.textContent = 'Create New Deck';
-  deckNameInput.value = '';
-  deckDescInput.value = '';
-  deleteDeckBtn.classList.add('hidden');
-  deckModal.classList.remove('hidden');
-  deckNameInput.focus();
-};
+if (createDeckBtn) {
+  createDeckBtn.onclick = () => {
+    editingTopicId = null;
+    modalTitle.textContent = 'Create New Deck';
+    deckNameInput.value = '';
+    deckDescInput.value = '';
+    deleteDeckBtn.classList.add('hidden');
+    deckModal.classList.remove('hidden');
+    deckNameInput.focus();
+  };
+}
 
 saveDeckBtn.onclick = async (e) => {
   e.preventDefault();
@@ -207,11 +218,23 @@ deckModal.onclick = (e) => {
 };
 
 // Prevent modal content clicks from closing modal
-const modalContent = document.querySelector('.modal-content');
-if (modalContent) {
-  modalContent.onclick = (e) => {
-    e.stopPropagation();
-  };
+// Wait for DOM to be ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    const modalContent = document.querySelector('.modal-content');
+    if (modalContent) {
+      modalContent.onclick = (e) => {
+        e.stopPropagation();
+      };
+    }
+  });
+} else {
+  const modalContent = document.querySelector('.modal-content');
+  if (modalContent) {
+    modalContent.onclick = (e) => {
+      e.stopPropagation();
+    };
+  }
 }
 
 deleteDeckBtn.onclick = async () => {
@@ -302,11 +325,11 @@ studyAllMode.onchange = async (e) => {
   if (studyAllDecks) {
     await loadAllDecks();
   } else if (currentTopicId) {
-    await loadTopic(currentTopicId);
+    await loadTopic(currentTopicId, false);
   } else {
     const items = await listTopics();
     if (items.length) {
-      await loadTopic(items[0].id);
+      await loadTopic(items[0].id, false);
     }
   }
 };
@@ -317,9 +340,9 @@ async function load() {
   // если есть хотя бы одна тема — сразу открываем первую и показываем карточку
   if (items.length && !studyAllDecks) {
     if (!currentTopicId || !items.find(t => t.id === currentTopicId)) {
-      await loadTopic(items[0].id);
+      await loadTopic(items[0].id, true);
     } else {
-      await loadTopic(currentTopicId);
+      await loadTopic(currentTopicId, true);
     }
   } else if (studyAllDecks) {
     await loadAllDecks();
@@ -328,7 +351,7 @@ async function load() {
   }
 }
 
-async function loadTopic(topicId) {
+async function loadTopic(topicId, skipRefresh = false) {
   currentTopicId = topicId;
   studyAllDecks = false;
   cards = await listCardsByTopic(currentTopicId);
@@ -339,7 +362,11 @@ async function loadTopic(topicId) {
   // pick first card: prefer due
   index = pickNextIndex(cards, -1);
   await updateCardView();
-  await load(); // Refresh topic list to update active state
+  if (!skipRefresh) {
+    // Refresh topic list to update active state (but don't reload the topic)
+    const items = await listTopics();
+    await renderTopics(items);
+  }
 }
 
 async function loadAllDecks() {
@@ -355,17 +382,24 @@ async function loadAllDecks() {
   cards = allCards;
   index = pickNextIndex(cards, -1);
   await updateCardView();
-  await load(); // Refresh topic list
+  // Refresh topic list to update active state
+  const items = await listTopics();
+  await renderTopics(items);
 }
 
 function shuffle(arr) { arr.sort(() => Math.random() - 0.5); }
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c])); }
 
 (async function init(){
+  // Ensure modal is hidden on initialization
+  if (deckModal) {
+    deckModal.classList.add('hidden');
+  }
+  
   // Проверяем, есть ли уже данные в БД
   const existingTopics = await listTopics();
   
-  // Если БД пустая - импортируем билеты с Notion
+  // Если БД пустая - импортируем билеты с Notion (silently, no prompts)
   if (existingTopics.length === 0) {
     try {
       const data = await fetchNotionPublicPage(DEFAULT_NOTION_URL);
