@@ -1,4 +1,4 @@
-import { listTopics, listCardsByTopic, updateCard, seedIfEmpty, clearAll, importJson, getSrs, upsertSrs } from './db.js';
+import { listTopics, listCardsByTopic, updateCard, seedIfEmpty, clearAll, importJson, getSrs, upsertSrs, createTopic, updateTopic, deleteTopic, getAllCards, getAllSrs } from './db.js';
 
 // Авто-источник: публичная страница Notion с билетами пользователя
 const DEFAULT_NOTION_URL = 'https://pollen-jewel-bec.notion.site/1-c-8ec04abc8dba4cebbad42125cde3dba9';
@@ -17,26 +17,70 @@ const fileInput = document.getElementById('fileInput');
 const resetBtn = document.getElementById('resetBtn');
 const urlInput = document.getElementById('urlInput');
 const importUrlBtn = document.getElementById('importUrlBtn');
+const createDeckBtn = document.getElementById('createDeckBtn');
+const studyAllMode = document.getElementById('studyAllMode');
+const deckInfo = document.getElementById('deckInfo');
+const deckModal = document.getElementById('deckModal');
+const modalTitle = document.getElementById('modalTitle');
+const deckNameInput = document.getElementById('deckNameInput');
+const deckDescInput = document.getElementById('deckDescInput');
+const saveDeckBtn = document.getElementById('saveDeckBtn');
+const cancelDeckBtn = document.getElementById('cancelDeckBtn');
+const deleteDeckBtn = document.getElementById('deleteDeckBtn');
 
 let currentTopicId = null;
 let cards = [];
 let index = 0;
 let showEditor = true;
+let studyAllDecks = false;
+let editingTopicId = null;
 const srsCache = new Map(); // cardId -> { cardId, level, nextDue }
 
-function renderTopics(items) {
+async function renderTopics(items) {
   topicsList.innerHTML = '';
-  items.forEach(t => {
+  const now = Date.now();
+  
+  for (const t of items) {
     const li = document.createElement('li');
-    li.innerHTML = `<div class="topic-name">${escapeHtml(t.name)}</div>` + (t.description ? `<div class="topic-desc">${escapeHtml(t.description)}</div>` : '');
+    if (currentTopicId === t.id && !studyAllDecks) {
+      li.classList.add('active');
+    }
+    
+    // Get statistics for this deck
+    const deckCards = await listCardsByTopic(t.id);
+    const deckSrs = await Promise.all(deckCards.map(c => getSrs(c.id)));
+    const dueCount = deckSrs.filter(srs => !srs || srs.nextDue <= now).length;
+    const totalCount = deckCards.length;
+    
+    li.innerHTML = `
+      <div class="topic-header">
+        <div style="flex: 1;">
+          <div class="topic-name">${escapeHtml(t.name)}</div>
+          ${t.description ? `<div class="topic-desc">${escapeHtml(t.description)}</div>` : ''}
+          <div class="topic-stats">
+            <span>${totalCount} cards</span>
+            <span>${dueCount} due</span>
+          </div>
+        </div>
+        <div class="topic-actions" onclick="event.stopPropagation()">
+          <button onclick="editDeck('${t.id}')" title="Edit">✏️</button>
+          <button onclick="deleteDeckConfirm('${t.id}')" title="Delete">🗑️</button>
+        </div>
+      </div>
+    `;
+    
     li.onclick = async () => {
+      studyAllDecks = false;
+      studyAllMode.checked = false;
       await loadTopic(t.id);
     };
+    
     topicsList.appendChild(li);
-  });
+  }
+  
 }
 
-function updateCardView() {
+async function updateCardView() {
   if (!cards.length) {
     cardView.classList.add('hidden');
     empty.classList.remove('hidden');
@@ -50,6 +94,22 @@ function updateCardView() {
   aInput.value = c?.answer || '';
   const editorBlock = document.querySelector('.editor');
   editorBlock.style.display = showEditor ? '' : 'none';
+  
+  // Update deck info
+  if (studyAllDecks) {
+    const currentCard = cards[index];
+    const allTopics = await listTopics();
+    const cardTopic = allTopics.find(t => t.id === currentCard?.topic_id);
+    deckInfo.innerHTML = `<strong>Study All Decks</strong><span>Card from: ${escapeHtml(cardTopic?.name || 'Unknown')}</span>`;
+  } else if (currentTopicId) {
+    const topic = (await listTopics()).find(t => t.id === currentTopicId);
+    const now = Date.now();
+    const dueCount = Array.from(srsCache.values()).filter(srs => srs.nextDue <= now).length;
+    const totalCount = cards.length;
+    deckInfo.innerHTML = `<strong>${escapeHtml(topic?.name || 'Deck')}</strong><span>${dueCount} due / ${totalCount} total</span>`;
+  } else {
+    deckInfo.innerHTML = '';
+  }
 }
 
 nextBtn.onclick = async () => {
@@ -59,14 +119,14 @@ nextBtn.onclick = async () => {
   await scheduleSrs(current.id, wasCorrect);
   correctChk.checked = false;
   index = pickNextIndex(cards, index);
-  updateCardView();
+  await updateCardView();
 };
 saveBtn.onclick = async () => {
   if (!cards.length) return;
   const c = { ...cards[index], question: qInput.value, answer: aInput.value };
   await updateCard(c);
   cards[index] = c;
-  updateCardView();
+  await updateCardView();
 };
 
 importBtn.onclick = () => fileInput.click();
@@ -102,19 +162,134 @@ importUrlBtn.onclick = async () => {
   } catch {}
 };
 
+// Deck management
+createDeckBtn.onclick = () => {
+  editingTopicId = null;
+  modalTitle.textContent = 'Create New Deck';
+  deckNameInput.value = '';
+  deckDescInput.value = '';
+  deleteDeckBtn.classList.add('hidden');
+  deckModal.classList.remove('hidden');
+  deckNameInput.focus();
+};
+
+saveDeckBtn.onclick = async () => {
+  const name = deckNameInput.value.trim();
+  if (!name) return;
+  
+  if (editingTopicId) {
+    const topics = await listTopics();
+    const topic = topics.find(t => t.id === editingTopicId);
+    if (topic) {
+      topic.name = name;
+      topic.description = deckDescInput.value.trim();
+      await updateTopic(topic);
+    }
+  } else {
+    const newTopic = {
+      id: crypto.randomUUID(),
+      name: name,
+      description: deckDescInput.value.trim()
+    };
+    await createTopic(newTopic);
+  }
+  
+  deckModal.classList.add('hidden');
+  await load();
+};
+
+cancelDeckBtn.onclick = () => {
+  deckModal.classList.add('hidden');
+};
+
+deckModal.onclick = (e) => {
+  if (e.target === deckModal) {
+    deckModal.classList.add('hidden');
+  }
+};
+
+deleteDeckBtn.onclick = async () => {
+  if (!editingTopicId) return;
+  if (confirm('Are you sure you want to delete this deck? All cards will be deleted.')) {
+    await deleteTopic(editingTopicId);
+    deckModal.classList.add('hidden');
+    if (currentTopicId === editingTopicId) {
+      currentTopicId = null;
+      cards = [];
+      index = 0;
+    }
+    await load();
+  }
+};
+
+function editDeck(topicId) {
+  editingTopicId = topicId;
+  modalTitle.textContent = 'Edit Deck';
+  deleteDeckBtn.classList.remove('hidden');
+  (async () => {
+    const topics = await listTopics();
+    const topic = topics.find(t => t.id === topicId);
+    if (topic) {
+      deckNameInput.value = topic.name;
+      deckDescInput.value = topic.description || '';
+      deckModal.classList.remove('hidden');
+      deckNameInput.focus();
+    }
+  })();
+}
+
+function deleteDeckConfirm(topicId) {
+  if (confirm('Are you sure you want to delete this deck? All cards will be deleted.')) {
+    (async () => {
+      await deleteTopic(topicId);
+      if (currentTopicId === topicId) {
+        currentTopicId = null;
+        cards = [];
+        index = 0;
+      }
+      await load();
+    })();
+  }
+}
+
+// Make functions available globally for inline onclick handlers
+window.editDeck = editDeck;
+window.deleteDeckConfirm = deleteDeckConfirm;
+
+studyAllMode.onchange = async (e) => {
+  studyAllDecks = e.target.checked;
+  if (studyAllDecks) {
+    await loadAllDecks();
+  } else if (currentTopicId) {
+    await loadTopic(currentTopicId);
+  } else {
+    const items = await listTopics();
+    if (items.length) {
+      await loadTopic(items[0].id);
+    }
+  }
+};
+
 async function load() {
   const items = await listTopics();
-  renderTopics(items);
+  await renderTopics(items);
   // если есть хотя бы одна тема — сразу открываем первую и показываем карточку
-  if (items.length) {
-    await loadTopic(items[0].id);
+  if (items.length && !studyAllDecks) {
+    if (!currentTopicId || !items.find(t => t.id === currentTopicId)) {
+      await loadTopic(items[0].id);
+    } else {
+      await loadTopic(currentTopicId);
+    }
+  } else if (studyAllDecks) {
+    await loadAllDecks();
   } else {
-    currentTopicId = null; cards = []; index = 0; updateCardView();
+    currentTopicId = null; cards = []; index = 0; await updateCardView();
   }
 }
 
 async function loadTopic(topicId) {
   currentTopicId = topicId;
+  studyAllDecks = false;
   cards = await listCardsByTopic(currentTopicId);
   // load SRS for cards into cache
   srsCache.clear();
@@ -122,7 +297,24 @@ async function loadTopic(topicId) {
   records.forEach((rec, i) => { if (rec) srsCache.set(cards[i].id, rec); });
   // pick first card: prefer due
   index = pickNextIndex(cards, -1);
-  updateCardView();
+  await updateCardView();
+  await load(); // Refresh topic list to update active state
+}
+
+async function loadAllDecks() {
+  studyAllDecks = true;
+  currentTopicId = null;
+  const allCards = await getAllCards();
+  const allSrs = await getAllSrs();
+  
+  // Build SRS cache
+  srsCache.clear();
+  allSrs.forEach(srs => srsCache.set(srs.cardId, srs));
+  
+  cards = allCards;
+  index = pickNextIndex(cards, -1);
+  await updateCardView();
+  await load(); // Refresh topic list
 }
 
 function shuffle(arr) { arr.sort(() => Math.random() - 0.5); }

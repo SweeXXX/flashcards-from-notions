@@ -21,13 +21,23 @@
       <div class="content">
         <aside class="sidebar">
           <div class="topics">
-            <h2>Темы</h2>
+            <div class="topics-header">
+              <h2>Decks</h2>
+              <button id="createDeckBtn" class="btn-small" title="Create new deck">+ New</button>
+            </div>
+            <div class="study-mode-toggle">
+              <label>
+                <input type="checkbox" id="studyAllMode" />
+                Study All Decks
+              </label>
+            </div>
             <ul id="topicsList"></ul>
           </div>
         </aside>
         <main class="main">
           <section id="empty">Выберите тему слева</section>
           <section id="cardView" class="hidden">
+            <div class="deck-info" id="deckInfo"></div>
             <div class="flashcard">
               <div id="question" class="flashcard-question">—</div>
               <div class="controls">
@@ -45,8 +55,20 @@
         </main>
       </div>
     </div>
+    <div id="deckModal" class="modal hidden">
+      <div class="modal-content">
+        <h3 id="modalTitle">Create New Deck</h3>
+        <input type="text" id="deckNameInput" placeholder="Deck name" />
+        <textarea id="deckDescInput" placeholder="Description (optional)"></textarea>
+        <div class="modal-actions">
+          <button id="saveDeckBtn">Save</button>
+          <button id="cancelDeckBtn">Cancel</button>
+          <button id="deleteDeckBtn" class="btn-danger hidden">Delete</button>
+        </div>
+      </div>
+    </div>
     <script type="module" src="./app.js"></script>
   </body>
-  </html>
+</html>
 
 

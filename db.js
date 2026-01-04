@@ -109,4 +109,59 @@ export async function importJson(json) {
   });
 }
 
+export async function createTopic(topic) {
+  return tx(STORE_TOPICS, 'readwrite', (s) => s.put(topic));
+}
+
+export async function updateTopic(topic) {
+  return tx(STORE_TOPICS, 'readwrite', (s) => s.put(topic));
+}
+
+export async function deleteTopic(topicId) {
+  const db = await openDb();
+  // Delete topic and all its cards
+  return Promise.all([
+    new Promise((res, rej) => {
+      const t = db.transaction(STORE_TOPICS, 'readwrite');
+      t.objectStore(STORE_TOPICS).delete(topicId);
+      t.oncomplete = res; t.onerror = () => rej(t.error);
+    }),
+    new Promise((res, rej) => {
+      const t = db.transaction(STORE_CARDS, 'readwrite');
+      const s = t.objectStore(STORE_CARDS);
+      const req = s.openCursor();
+      req.onsuccess = (e) => {
+        const cursor = e.target.result;
+        if (cursor) {
+          if (cursor.value.topic_id === topicId) cursor.delete();
+          cursor.continue();
+        } else res();
+      };
+      req.onerror = () => rej(req.error);
+    })
+  ]);
+}
+
+export async function getAllCards() {
+  return tx(STORE_CARDS, 'readonly', (s) => new Promise((resolve) => {
+    const items = [];
+    s.openCursor().onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor) { items.push(cursor.value); cursor.continue(); }
+      else resolve(items);
+    };
+  }));
+}
+
+export async function getAllSrs() {
+  return tx(STORE_SRS, 'readonly', (s) => new Promise((resolve) => {
+    const items = [];
+    s.openCursor().onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor) { items.push(cursor.value); cursor.continue(); }
+      else resolve(items);
+    };
+  }));
+}
+
 
