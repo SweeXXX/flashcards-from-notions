@@ -1,0 +1,27 @@
+[33mcommit 545394816f7233c549f8291c62ba6954a716e18b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Никита Полетаев <nikitapoletaev44941@mail.ru>
+Date:   Tue Jan 13 12:40:40 2026 +0500
+
+    Remove auto-import of default deck, improve modal handling
+
+[1mdiff --git a/app.js b/app.js[m
+[1mindex 386a727..422e5fc 100644[m
+[1m--- a/app.js[m
+[1m+++ b/app.js[m
+[36m@@ -687,15 +687,7 @@[m [mfunction escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;'[m
+   // Проверяем, есть ли уже данные в БД[m
+   const existingTopics = await listTopics();[m
+ [m
+[31m-  // Если БД пустая - импортируем билеты с Notion (silently, no prompts)[m
+[31m-  if (existingTopics.length === 0) {[m
+[31m-    try {[m
+[31m-      const data = await fetchNotionPublicPage(DEFAULT_NOTION_URL);[m
+[31m-      if (data) await importJson(data);[m
+[31m-    } catch (error) {[m
+[31m-      console.log('Ошибка импорта из Notion:', error);[m
+[31m-    }[m
+[31m-  }[m
+[32m+[m[32m  // БД остается пустой при первом запуске - пользователь должен создать колоды вручную[m
+ [m
+   await load();[m
+ })();[m
