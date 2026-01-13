@@ -40,6 +40,7 @@ const saveGithubBtn = document.getElementById('saveGithubBtn');
 const cancelGithubBtn = document.getElementById('cancelGithubBtn');
 const githubStatus = document.getElementById('githubStatus');
 const checkTokenBtn = document.getElementById('checkTokenBtn');
+const importGithubBtn = document.getElementById('importGithubBtn');
 
 let currentTopicId = localStorage.getItem('currentTopicId') || null;
 let cards = [];
@@ -94,6 +95,10 @@ function updateGithubButtonStates() {
   if (testGithubBtn) {
     testGithubBtn.disabled = !isConfigured;
     testGithubBtn.title = isConfigured ? 'Test GitHub connection' : 'Configure GitHub settings first';
+  }
+  if (importGithubBtn) {
+    importGithubBtn.disabled = !isConfigured;
+    importGithubBtn.title = isConfigured ? 'Import data from GitHub' : 'Configure GitHub settings first';
   }
 }
 
@@ -527,6 +532,30 @@ if (syncGithubBtn) {
         ? 'Please configure your GitHub settings first (token and repository)'
         : error.message;
       githubStatus.textContent = `❌ Sync failed: ${errorMsg}`;
+      githubStatus.style.color = '#f44336';
+    }
+  };
+}
+
+if (importGithubBtn) {
+  importGithubBtn.onclick = async () => {
+    if (!confirm('⚠️ This will REPLACE ALL your local data with data from GitHub.\n\nAre you sure you want to continue?')) {
+      return;
+    }
+
+    console.log('Import from GitHub button clicked');
+    githubStatus.textContent = 'Importing data from GitHub...';
+    try {
+      await importDataFromGithub();
+      await load(); // Refresh the UI
+      githubStatus.textContent = '✅ Data imported from GitHub successfully!';
+      githubStatus.style.color = '#4CAF50';
+    } catch (error) {
+      console.error('Import from GitHub error:', error);
+      const errorMsg = error.message.includes('not configured')
+        ? 'Please configure your GitHub settings first (token and repository)'
+        : error.message;
+      githubStatus.textContent = `❌ Import failed: ${errorMsg}`;
       githubStatus.style.color = '#f44336';
     }
   };
