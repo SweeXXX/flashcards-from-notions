@@ -39,6 +39,7 @@ const syncGithubBtn = document.getElementById('syncGithubBtn');
 const saveGithubBtn = document.getElementById('saveGithubBtn');
 const cancelGithubBtn = document.getElementById('cancelGithubBtn');
 const githubStatus = document.getElementById('githubStatus');
+const checkTokenBtn = document.getElementById('checkTokenBtn');
 
 let currentTopicId = localStorage.getItem('currentTopicId') || null;
 let cards = [];
@@ -59,6 +60,28 @@ let githubSettingsBackup = JSON.parse(localStorage.getItem('githubSettingsBackup
 // Function to check if GitHub settings are configured
 function areGithubSettingsConfigured() {
   return githubToken && githubRepo;
+}
+
+// Function to validate GitHub token format
+function validateGithubToken(token) {
+  if (!token) return false;
+  // GitHub tokens are typically 40 characters long and start with ghp_ (classic) or github_pat_ (fine-grained)
+  return token.length >= 20; // Be flexible, but ensure it's not empty/short
+}
+
+// Function to check token format and provide feedback
+function checkTokenFormat() {
+  const token = githubTokenInput.value.trim();
+  if (!token) {
+    return 'No token entered';
+  }
+  if (token.length < 20) {
+    return `Token too short (${token.length} chars). GitHub tokens are usually 40+ characters.`;
+  }
+  if (token.includes(' ')) {
+    return 'Token contains spaces. Make sure you copied the entire token.';
+  }
+  return 'Token format looks OK';
 }
 
 // Function to update GitHub button states based on settings
@@ -448,6 +471,14 @@ if (githubRestoreBtn) {
   };
 }
 
+if (checkTokenBtn) {
+  checkTokenBtn.onclick = () => {
+    const result = checkTokenFormat();
+    githubStatus.textContent = `Token check: ${result}`;
+    githubStatus.style.color = result.includes('OK') ? '#4CAF50' : '#f44336';
+  };
+}
+
 if (testGithubBtn) {
   testGithubBtn.onclick = async () => {
     console.log('Test GitHub button clicked');
@@ -508,10 +539,17 @@ if (saveGithubBtn) {
     const newRepo = githubRepoInput.value.trim();
     const newBranch = githubBranchInput.value.trim() || 'main';
 
+    // Validate token format
+    if (newToken && !validateGithubToken(newToken)) {
+      alert('GitHub token appears to be invalid.\n\nMake sure you:\n• Copied the ENTIRE token (it should be long)\n• Didn\'t accidentally copy the token name instead\n• The token hasn\'t expired\n\nGet a new token at: https://github.com/settings/tokens');
+      githubTokenInput.focus();
+      return;
+    }
+
     // Validate repository format
     if (newRepo && !newRepo.includes('/')) {
       alert('Repository must be in format: username/repository\nExample: myusername/myrepo');
-      githubTokenInput.focus();
+      githubRepoInput.focus();
       return;
     }
 
@@ -629,8 +667,29 @@ async function githubRequest(endpoint, options = {}) {
     ...options.headers
   };
 
+  console.log('GitHub API Request:', {
+    url: url,
+    method: options.method || 'GET',
+    hasToken: !!githubToken,
+    tokenLength: githubToken ? githubToken.length : 0,
+    repo: githubRepo
+  });
+
   const response = await fetch(url, { ...options, headers });
+
+  console.log('GitHub API Response:', {
+    status: response.status,
+    statusText: response.statusText,
+    ok: response.ok
+  });
+
   if (!response.ok) {
+    const errorText = await response.text().catch(() => 'Unknown error');
+    console.error('GitHub API Error Details:', {
+      status: response.status,
+      statusText: response.statusText,
+      responseBody: errorText
+    });
     throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
   }
   return response.json();
