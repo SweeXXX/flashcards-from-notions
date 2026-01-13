@@ -399,13 +399,25 @@ studyAllMode.onchange = async (e) => {
 };
 
 // GitHub sync event handlers
+console.log('Setting up GitHub sync handlers...');
+console.log('githubSyncBtn exists:', !!githubSyncBtn);
+console.log('githubModal exists:', !!githubModal);
+console.log('githubTokenInput exists:', !!githubTokenInput);
+
 if (githubSyncBtn) {
   githubSyncBtn.onclick = () => {
-    githubTokenInput.value = githubToken;
-    githubRepoInput.value = githubRepo;
-    githubBranchInput.value = githubBranch;
-    githubStatus.textContent = '';
+    console.log('GitHub sync button clicked');
+    console.log('githubToken:', githubToken);
+    console.log('githubRepo:', githubRepo);
+    console.log('githubBranch:', githubBranch);
+
+    if (githubTokenInput) githubTokenInput.value = githubToken;
+    if (githubRepoInput) githubRepoInput.value = githubRepo;
+    if (githubBranchInput) githubBranchInput.value = githubBranch;
+    if (githubStatus) githubStatus.textContent = '';
+
     githubModal.classList.remove('hidden');
+    console.log('GitHub modal should be visible now');
   };
 }
 
@@ -483,6 +495,7 @@ if (saveGithubBtn) {
 
 if (cancelGithubBtn) {
   cancelGithubBtn.onclick = () => {
+    console.log('GitHub cancel button clicked');
     githubModal.classList.add('hidden');
   };
 }
@@ -490,7 +503,9 @@ if (cancelGithubBtn) {
 // Close modal when clicking outside
 if (githubModal) {
   githubModal.onclick = (e) => {
+    console.log('GitHub modal background clicked');
     if (e.target === githubModal) {
+      console.log('Closing GitHub modal');
       githubModal.classList.add('hidden');
     }
   };
@@ -669,6 +684,13 @@ function shuffle(arr) { arr.sort(() => Math.random() - 0.5); }
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c])); }
 
 (async function init(){
+  console.log('Initializing app...');
+  console.log('DOM elements check:');
+  console.log('- githubSyncBtn:', !!document.getElementById('githubSyncBtn'));
+  console.log('- githubModal:', !!document.getElementById('githubModal'));
+  console.log('- githubTokenInput:', !!document.getElementById('githubTokenInput'));
+  console.log('- cancelGithubBtn:', !!document.getElementById('cancelGithubBtn'));
+
   // Ensure modal is hidden on initialization
   if (deckModal) {
     deckModal.classList.add('hidden');
