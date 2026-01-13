@@ -41,6 +41,11 @@ const cancelGithubBtn = document.getElementById('cancelGithubBtn');
 const githubStatus = document.getElementById('githubStatus');
 const checkTokenBtn = document.getElementById('checkTokenBtn');
 const importGithubBtn = document.getElementById('importGithubBtn');
+console.log('GitHub elements found:', {
+  githubStatus: !!githubStatus,
+  checkTokenBtn: !!checkTokenBtn,
+  importGithubBtn: !!importGithubBtn
+});
 
 let currentTopicId = localStorage.getItem('currentTopicId') || null;
 let cards = [];
@@ -538,15 +543,20 @@ if (syncGithubBtn) {
 }
 
 if (importGithubBtn) {
+  console.log('Import GitHub button element found:', importGithubBtn);
   importGithubBtn.onclick = async () => {
+    console.log('Import from GitHub button clicked - handler executed');
     if (!confirm('⚠️ This will REPLACE ALL your local data with data from GitHub.\n\nAre you sure you want to continue?')) {
+      console.log('Import cancelled by user');
       return;
     }
 
-    console.log('Import from GitHub button clicked');
+    console.log('Starting import from GitHub');
     githubStatus.textContent = 'Importing data from GitHub...';
     try {
+      console.log('Calling importDataFromGithub function');
       await importDataFromGithub();
+      console.log('Import successful, refreshing UI');
       await load(); // Refresh the UI
       githubStatus.textContent = '✅ Data imported from GitHub successfully!';
       githubStatus.style.color = '#4CAF50';
@@ -800,14 +810,22 @@ async function exportDataToGithub() {
 }
 
 async function importDataFromGithub() {
+  console.log('importDataFromGithub function called');
+  console.log('Fetching flashcards-data.json from GitHub...');
   const data = await getFileFromGithub('flashcards-data.json');
+  console.log('Data received from GitHub:', data);
+
   if (!data) {
+    console.error('No data found on GitHub');
     throw new Error('No data found on GitHub');
   }
 
+  console.log('Clearing local data...');
   // Import data to local database
   await clearAll();
+  console.log('Importing data to local database...');
   await importJson(data);
+  console.log('Import completed successfully');
 
   return data;
 }
