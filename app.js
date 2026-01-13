@@ -40,11 +40,11 @@ const saveGithubBtn = document.getElementById('saveGithubBtn');
 const cancelGithubBtn = document.getElementById('cancelGithubBtn');
 const githubStatus = document.getElementById('githubStatus');
 
-let currentTopicId = null;
+let currentTopicId = localStorage.getItem('currentTopicId') || null;
 let cards = [];
 let index = 0;
 let showEditor = true;
-let studyAllDecks = false;
+let studyAllDecks = localStorage.getItem('studyAllDecks') === 'true';
 let editingTopicId = null;
 const srsCache = new Map(); // cardId -> { cardId, level, nextDue }
 
@@ -303,6 +303,7 @@ deleteDeckBtn.onclick = async () => {
     await syncToGithubIfEnabled();
     if (currentTopicId === editingTopicId) {
       currentTopicId = null;
+      localStorage.setItem('currentTopicId', '');
       cards = [];
       index = 0;
     }
@@ -333,6 +334,7 @@ function deleteDeckConfirm(topicId) {
       await syncToGithubIfEnabled();
       if (currentTopicId === topicId) {
         currentTopicId = null;
+        localStorage.setItem('currentTopicId', '');
         cards = [];
         index = 0;
       }
@@ -383,6 +385,7 @@ window.importToDeck = importToDeck;
 
 studyAllMode.onchange = async (e) => {
   studyAllDecks = e.target.checked;
+  localStorage.setItem('studyAllDecks', studyAllDecks);
   if (studyAllDecks) {
     await loadAllDecks();
   } else if (currentTopicId) {
@@ -513,6 +516,8 @@ async function load() {
 async function loadTopic(topicId, skipRefresh = false) {
   currentTopicId = topicId;
   studyAllDecks = false;
+  localStorage.setItem('currentTopicId', currentTopicId);
+  localStorage.setItem('studyAllDecks', studyAllDecks);
   cards = await listCardsByTopic(currentTopicId);
   // load SRS for cards into cache
   srsCache.clear();
@@ -531,6 +536,8 @@ async function loadTopic(topicId, skipRefresh = false) {
 async function loadAllDecks() {
   studyAllDecks = true;
   currentTopicId = null;
+  localStorage.setItem('currentTopicId', currentTopicId || '');
+  localStorage.setItem('studyAllDecks', studyAllDecks);
   const allCards = await getAllCards();
   const allSrs = await getAllSrs();
   
@@ -665,6 +672,11 @@ function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;'
   // Ensure modal is hidden on initialization
   if (deckModal) {
     deckModal.classList.add('hidden');
+  }
+
+  // Set study mode checkbox to match saved value
+  if (studyAllMode) {
+    studyAllMode.checked = studyAllDecks;
   }
 
   // Show restore button if backup exists but current settings are empty

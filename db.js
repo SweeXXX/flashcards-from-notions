@@ -74,6 +74,7 @@ export async function clearAll() {
   return Promise.all([
     new Promise((res, rej) => { const t = db.transaction(STORE_TOPICS, 'readwrite'); t.objectStore(STORE_TOPICS).clear(); t.oncomplete = res; t.onerror = () => rej(t.error); }),
     new Promise((res, rej) => { const t = db.transaction(STORE_CARDS, 'readwrite'); t.objectStore(STORE_CARDS).clear(); t.oncomplete = res; t.onerror = () => rej(t.error); }),
+    new Promise((res, rej) => { const t = db.transaction(STORE_SRS, 'readwrite'); t.objectStore(STORE_SRS).clear(); t.oncomplete = res; t.onerror = () => rej(t.error); }),
   ]);
 }
 
@@ -98,13 +99,15 @@ export async function seedIfEmpty() {
 
 export async function importJson(json) {
   const db = await openDb();
-  const { topics = [], cards = [] } = json || {};
+  const { topics = [], cards = [], srs = [] } = json || {};
   await new Promise((res, rej) => {
-    const t = db.transaction([STORE_TOPICS, STORE_CARDS], 'readwrite');
+    const t = db.transaction([STORE_TOPICS, STORE_CARDS, STORE_SRS], 'readwrite');
     const st = t.objectStore(STORE_TOPICS);
     const sc = t.objectStore(STORE_CARDS);
+    const ss = t.objectStore(STORE_SRS);
     topics.forEach(ti => st.put(ti));
     cards.forEach(ci => sc.put(ci));
+    srs.forEach(si => ss.put(si));
     t.oncomplete = res; t.onerror = () => rej(t.error);
   });
 }
