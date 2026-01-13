@@ -427,24 +427,9 @@ if (githubRestoreBtn) {
   };
 }
 
-if (githubImportBtn) {
-  githubImportBtn.onclick = async () => {
-    if (!confirm('This will replace all local data with data from GitHub. Continue?')) {
-      return;
-    }
-
-    try {
-      await importDataFromGithub();
-      await load(); // Refresh the UI
-      alert('✅ Data imported from GitHub successfully!');
-    } catch (error) {
-      alert(`❌ Import failed: ${error.message}`);
-    }
-  };
-}
-
 if (testGithubBtn) {
   testGithubBtn.onclick = async () => {
+    console.log('Test GitHub button clicked');
     githubStatus.textContent = 'Testing connection...';
     try {
       const success = await testGithubConnection();
@@ -456,6 +441,7 @@ if (testGithubBtn) {
         githubStatus.style.color = '#f44336';
       }
     } catch (error) {
+      console.error('Test GitHub error:', error);
       githubStatus.textContent = `❌ Error: ${error.message}`;
       githubStatus.style.color = '#f44336';
     }
@@ -464,12 +450,14 @@ if (testGithubBtn) {
 
 if (syncGithubBtn) {
   syncGithubBtn.onclick = async () => {
+    console.log('Sync GitHub button clicked');
     githubStatus.textContent = 'Syncing data...';
     try {
       await exportDataToGithub();
       githubStatus.textContent = '✅ Data exported to GitHub!';
       githubStatus.style.color = '#4CAF50';
     } catch (error) {
+      console.error('Sync GitHub error:', error);
       githubStatus.textContent = `❌ Sync failed: ${error.message}`;
       githubStatus.style.color = '#f44336';
     }
@@ -478,6 +466,7 @@ if (syncGithubBtn) {
 
 if (saveGithubBtn) {
   saveGithubBtn.onclick = () => {
+    console.log('Save GitHub button clicked');
     githubToken = githubTokenInput.value.trim();
     githubRepo = githubRepoInput.value.trim();
     githubBranch = githubBranchInput.value.trim() || 'main';
