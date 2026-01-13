@@ -687,15 +687,7 @@ function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;'
   // Проверяем, есть ли уже данные в БД
   const existingTopics = await listTopics();
 
-  // Если БД пустая - импортируем билеты с Notion (silently, no prompts)
-  if (existingTopics.length === 0) {
-    try {
-      const data = await fetchNotionPublicPage(DEFAULT_NOTION_URL);
-      if (data) await importJson(data);
-    } catch (error) {
-      console.log('Ошибка импорта из Notion:', error);
-    }
-  }
+  // БД остается пустой при первом запуске - пользователь должен создать колоды вручную
 
   await load();
 })();
