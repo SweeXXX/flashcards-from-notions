@@ -56,6 +56,24 @@ let githubBranch = localStorage.getItem('githubBranch') || 'main';
 // Backup settings for recovery
 let githubSettingsBackup = JSON.parse(localStorage.getItem('githubSettingsBackup') || 'null');
 
+// Function to check if GitHub settings are configured
+function areGithubSettingsConfigured() {
+  return githubToken && githubRepo;
+}
+
+// Function to update GitHub button states based on settings
+function updateGithubButtonStates() {
+  const isConfigured = areGithubSettingsConfigured();
+  if (syncGithubBtn) {
+    syncGithubBtn.disabled = !isConfigured;
+    syncGithubBtn.title = isConfigured ? 'Sync data to GitHub' : 'Configure GitHub settings first';
+  }
+  if (testGithubBtn) {
+    testGithubBtn.disabled = !isConfigured;
+    testGithubBtn.title = isConfigured ? 'Test GitHub connection' : 'Configure GitHub settings first';
+  }
+}
+
 // Function to backup GitHub settings
 function backupGithubSettings() {
   if (githubToken || githubRepo) {
@@ -79,6 +97,9 @@ function restoreGithubSettings() {
     localStorage.setItem('githubToken', githubToken);
     localStorage.setItem('githubRepo', githubRepo);
     localStorage.setItem('githubBranch', githubBranch);
+
+    // Update button states
+    updateGithubButtonStates();
 
     // Hide restore button after successful restore
     if (githubRestoreBtn) {
@@ -441,8 +462,21 @@ if (testGithubBtn) {
         githubStatus.style.color = '#f44336';
       }
     } catch (error) {
-      console.error('Test GitHub error:', error);
-      githubStatus.textContent = `❌ Error: ${error.message}`;
+      console.error('Test connection error:', error);
+      let errorMsg = error.message;
+
+      // Provide more helpful error messages
+      if (errorMsg.includes('404')) {
+        errorMsg = 'Repository not found. Check the repository name and ensure it exists.';
+      } else if (errorMsg.includes('401') || errorMsg.includes('Unauthorized')) {
+        errorMsg = 'Invalid token or insufficient permissions. Check your Personal Access Token.';
+      } else if (errorMsg.includes('403') || errorMsg.includes('Forbidden')) {
+        errorMsg = 'Access denied. Your token may not have the required permissions (repo scope needed).';
+      } else if (errorMsg.includes('format')) {
+        errorMsg = errorMsg; // Keep the validation message as-is
+      }
+
+      githubStatus.textContent = `❌ ${errorMsg}`;
       githubStatus.style.color = '#f44336';
     }
   };
@@ -458,7 +492,10 @@ if (syncGithubBtn) {
       githubStatus.style.color = '#4CAF50';
     } catch (error) {
       console.error('Sync GitHub error:', error);
-      githubStatus.textContent = `❌ Sync failed: ${error.message}`;
+      const errorMsg = error.message.includes('not configured')
+        ? 'Please configure your GitHub settings first (token and repository)'
+        : error.message;
+      githubStatus.textContent = `❌ Sync failed: ${errorMsg}`;
       githubStatus.style.color = '#f44336';
     }
   };
@@ -467,9 +504,27 @@ if (syncGithubBtn) {
 if (saveGithubBtn) {
   saveGithubBtn.onclick = () => {
     console.log('Save GitHub button clicked');
-    githubToken = githubTokenInput.value.trim();
-    githubRepo = githubRepoInput.value.trim();
-    githubBranch = githubBranchInput.value.trim() || 'main';
+    const newToken = githubTokenInput.value.trim();
+    const newRepo = githubRepoInput.value.trim();
+    const newBranch = githubBranchInput.value.trim() || 'main';
+
+    // Validate repository format
+    if (newRepo && !newRepo.includes('/')) {
+      alert('Repository must be in format: username/repository\nExample: myusername/myrepo');
+      githubTokenInput.focus();
+      return;
+    }
+
+    const parts = newRepo.split('/');
+    if (newRepo && (parts.length !== 2 || !parts[0] || !parts[1])) {
+      alert('Repository must be in format: username/repository\nExample: myusername/myrepo');
+      githubRepoInput.focus();
+      return;
+    }
+
+    githubToken = newToken;
+    githubRepo = newRepo;
+    githubBranch = newBranch;
 
     localStorage.setItem('githubToken', githubToken);
     localStorage.setItem('githubRepo', githubRepo);
@@ -477,6 +532,9 @@ if (saveGithubBtn) {
 
     // Backup settings for recovery
     backupGithubSettings();
+
+    // Update button states
+    updateGithubButtonStates();
 
     githubModal.classList.add('hidden');
   };
@@ -618,10 +676,22 @@ async function saveFileToGithub(path, content, message = 'Update flashcards data
 
 async function testGithubConnection() {
   try {
+    // First validate the repository format
+    if (!githubRepo || !githubRepo.includes('/')) {
+      throw new Error('Repository must be in format: username/repository');
+    }
+
+    const parts = githubRepo.split('/');
+    if (parts.length !== 2 || !parts[0] || !parts[1]) {
+      throw new Error('Repository must be in format: username/repository');
+    }
+
+    // Test the connection by getting repository contents
     await githubRequest('/contents');
     return true;
   } catch (error) {
-    return false;
+    console.error('GitHub connection test failed:', error);
+    throw error; // Re-throw to preserve the original error message
   }
 }
 
@@ -694,6 +764,9 @@ function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;'
   if (githubSettingsBackup && (!githubToken || !githubRepo) && githubRestoreBtn) {
     githubRestoreBtn.style.display = 'inline-block';
   }
+
+  // Update GitHub button states based on current settings
+  updateGithubButtonStates();
 
   // Проверяем, есть ли уже данные в БД
   const existingTopics = await listTopics();
