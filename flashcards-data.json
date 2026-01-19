@@ -1075,9 +1075,19 @@
   ],
   "srs": [
     {
+      "cardId": "00e38ff8-61ae-4c58-99bd-21bb471c6472",
+      "level": 1,
+      "nextDue": 1768971426165
+    },
+    {
       "cardId": "0294cbf2-f5ea-451b-9c3b-194501446f4a",
       "level": 3,
       "nextDue": 1769408155324
+    },
+    {
+      "cardId": "032a176f-c538-4b66-8ecf-c096e97a84a4",
+      "level": 0,
+      "nextDue": 1768884922775
     },
     {
       "cardId": "057f70f0-8903-4bd2-beed-7b166220cfec",
@@ -1130,5 +1140,5 @@
       "nextDue": 1768804612509
     }
   ],
-  "exportedAt": "2026-01-19T04:55:19.530Z"
+  "exportedAt": "2026-01-19T04:57:06.173Z"
 }
