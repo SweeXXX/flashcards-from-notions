@@ -1173,7 +1173,12 @@
       "cardId": "3963fcbc-0400-4cb6-9659-2efe1b581084",
       "level": 1,
       "nextDue": 1768972834579
+    },
+    {
+      "cardId": "457eaf7f-2c6c-427c-8d2b-dd1c5f90705d",
+      "level": 0,
+      "nextDue": 1768888155116
     }
   ],
-  "exportedAt": "2026-01-19T05:36:59.815Z"
+  "exportedAt": "2026-01-19T05:49:15.127Z"
 }
