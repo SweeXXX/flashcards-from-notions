@@ -16,6 +16,11 @@
       "description": ""
     },
     {
+      "id": "64426bed-d091-45d5-b7cf-f0d22bd7f3fa",
+      "name": "3 semestr",
+      "description": ""
+    },
+    {
       "id": "c9bcb983-2f54-4e1b-8cc6-8fad9c9f59c6",
       "name": "3 semestr",
       "description": ""
@@ -1161,8 +1166,8 @@
     },
     {
       "cardId": "2b4c11e5-615b-48ff-9a70-ce5b5b5c2a1e",
-      "level": 0,
-      "nextDue": 1768804563474
+      "level": 1,
+      "nextDue": 1769062081218
     },
     {
       "cardId": "2b96a222-8c55-41e0-8391-26b2fd7369a7",
@@ -1275,5 +1280,5 @@
       "nextDue": 1768977071811
     }
   ],
-  "exportedAt": "2026-01-20T06:07:25.917Z"
+  "exportedAt": "2026-01-20T06:09:19.193Z"
 }
