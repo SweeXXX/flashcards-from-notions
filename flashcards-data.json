@@ -1,11 +1,6 @@
 {
   "topics": [
     {
-      "id": "3653bdb9-54b9-48d5-a4f6-bf56bae4ef30",
-      "name": "1 semestr",
-      "description": ""
-    },
-    {
       "id": "c262b1ad-2154-4aee-b30d-ac0ee7f66385",
       "name": "1 semestr",
       "description": ""
@@ -1091,8 +1086,8 @@
     },
     {
       "cardId": "2b4c11e5-615b-48ff-9a70-ce5b5b5c2a1e",
-      "level": 2,
-      "nextDue": 1769592688865
+      "level": 3,
+      "nextDue": 1769938309942
     },
     {
       "cardId": "2b96a222-8c55-41e0-8391-26b2fd7369a7",
@@ -1205,5 +1200,5 @@
       "nextDue": 1768977071811
     }
   ],
-  "exportedAt": "2026-01-24T09:31:28.873Z"
+  "exportedAt": "2026-01-24T09:35:30.239Z"
 }
