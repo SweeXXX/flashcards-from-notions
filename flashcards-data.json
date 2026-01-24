@@ -1106,8 +1106,8 @@
     },
     {
       "cardId": "307c6534-4ada-4dc1-b5be-cb270de8d297",
-      "level": 1,
-      "nextDue": 1768975258097
+      "level": 2,
+      "nextDue": 1769589425375
     },
     {
       "cardId": "31fb4dda-9ac3-4265-9bbe-622d783a3c2d",
@@ -1116,8 +1116,8 @@
     },
     {
       "cardId": "33f6ebec-e430-48ee-856c-86652d2ea153",
-      "level": 1,
-      "nextDue": 1768975496104
+      "level": 2,
+      "nextDue": 1769591503751
     },
     {
       "cardId": "34d71a32-aca2-4685-9ae9-4cdd4aeeaa08",
@@ -1200,5 +1200,5 @@
       "nextDue": 1768977071811
     }
   ],
-  "exportedAt": "2026-01-24T08:36:54.021Z"
+  "exportedAt": "2026-01-24T09:11:43.759Z"
 }
