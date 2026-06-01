@@ -250,7 +250,7 @@
     {
       "id": "e4c61286-1932-4e5e-8798-d7a3144cc99d",
       "question": "[![Image 32](https://file.notion.so/f/f/4796b420-e0cf-4047-815a-816cf58b2b03/68d581ef-bc62-4737-9ca6-c6c336207238/cat-cute-cat.gif?table=block&id=c6705daf-6a0c-42e3-9b67-71c2a12a974b&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&expirationTimestamp=1780344000000&signature=EwPbpyTLoAUO4zDEQLLnx2fC8-2FsgWFrhAtI7z5v40) 28. Леммы 1, 2. Теорема Рисса](http://brindle-catcher-367.notion.site/28-1-2-c6705daf6a0c42e39b6771c2a12a974b?pvs=25)",
-      "answer": "",
+      "answer": "28 Леммы 1, 2. Теорема Рисса.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
@@ -262,13 +262,13 @@
     {
       "id": "f35d87ff-e031-4fe5-9cec-6dc80286ea97",
       "question": "[![Image 35](http://brindle-catcher-367.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F4796b420-e0cf-4047-815a-816cf58b2b03%2Ffacf89e6-f6aa-452a-aa01-b3b0b2170d37%2FHomiakTtsad_005.webp?table=block&id=6d39512e-043c-4bcc-a8c8-5cdf9258ba45&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&width=40&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl) 31. Определение и условия существования интеграла Лебега.](http://brindle-catcher-367.notion.site/31-6d39512e043c4bcca8c85cdf9258ba45?pvs=25)",
-      "answer": "",
+      "answer": "31 Определение и условия существования интеграла Лебега.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
       "id": "f38df278-84a4-4345-ae26-00262208742d",
       "question": "[![Image 29](http://brindle-catcher-367.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F4796b420-e0cf-4047-815a-816cf58b2b03%2F7c0add14-40ac-44b8-a2ca-0b06b82d58e4%2FHomiakTtsad_085.webp?table=block&id=180d9a2b-6c33-490c-9264-022d50d1de84&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&width=40&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl) 25. Свойства измеримых функций.](http://brindle-catcher-367.notion.site/25-180d9a2b6c33490c9264022d50d1de84?pvs=25)",
-      "answer": "",
+      "answer": "25 Свойства измеримых функций.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     }
   ],
@@ -276,12 +276,12 @@
     {
       "cardId": "05110c1b-c0a0-42ea-91ee-69f689ca712b",
       "level": 0,
-      "nextDue": 1780406666404
+      "nextDue": 1780407158491
     },
     {
       "cardId": "10d17b00-adc8-47df-829f-34d9d9a612e2",
       "level": 0,
-      "nextDue": 1780406679543
+      "nextDue": 1780407160899
     },
     {
       "cardId": "1151fdcd-c10b-40f3-b35b-2f6ff88342e1",
@@ -291,12 +291,12 @@
     {
       "cardId": "11ca016f-7828-4d04-bffd-2e2ee6d8f230",
       "level": 0,
-      "nextDue": 1780406694657
+      "nextDue": 1780407162299
     },
     {
       "cardId": "1324136b-2c66-482b-a70f-7474179c97f0",
       "level": 0,
-      "nextDue": 1780406709055
+      "nextDue": 1780407163160
     },
     {
       "cardId": "1862d7f9-7145-4657-8e43-e01f5f82de4c",
@@ -306,7 +306,7 @@
     {
       "cardId": "1e5d1944-2547-42b5-8819-537fb2506351",
       "level": 0,
-      "nextDue": 1780406722397
+      "nextDue": 1780407164343
     },
     {
       "cardId": "367e69f3-37d2-4658-b610-714fef9381a8",
@@ -467,7 +467,32 @@
       "cardId": "d2d154d9-779e-4c50-84f6-e734de9a947d",
       "level": 1,
       "nextDue": 1780493499347
+    },
+    {
+      "cardId": "d4793b81-a572-4841-8a25-7b18118a899c",
+      "level": 0,
+      "nextDue": 1780407111444
+    },
+    {
+      "cardId": "e4c61286-1932-4e5e-8798-d7a3144cc99d",
+      "level": 0,
+      "nextDue": 1780407122363
+    },
+    {
+      "cardId": "e6100bd8-7fff-4ff5-be11-347091f1dc1c",
+      "level": 1,
+      "nextDue": 1780493524523
+    },
+    {
+      "cardId": "f35d87ff-e031-4fe5-9cec-6dc80286ea97",
+      "level": 0,
+      "nextDue": 1780407136532
+    },
+    {
+      "cardId": "f38df278-84a4-4345-ae26-00262208742d",
+      "level": 0,
+      "nextDue": 1780407148334
     }
   ],
-  "exportedAt": "2026-06-01T13:31:50.358Z"
+  "exportedAt": "2026-06-01T13:32:51.735Z"
 }
