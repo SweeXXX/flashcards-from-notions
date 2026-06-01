@@ -58,13 +58,13 @@
     {
       "id": "37ebe051-7b26-4ae4-b180-4b651cc1a27c",
       "question": "[![Image 27](http://brindle-catcher-367.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F4796b420-e0cf-4047-815a-816cf58b2b03%2F83c80e67-f36b-4760-b965-f0fffee3ad04%2FHomiakTtsad_033.webp?table=block&id=ca7f425a-509c-4cd6-bd3c-3f03e5a3cdd0&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&width=40&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl) 23. Измеримые по Лебегу множества.](http://brindle-catcher-367.notion.site/23-ca7f425a509c4cd6bd3c3f03e5a3cdd0?pvs=25)",
-      "answer": "",
+      "answer": "23 Измеримые по Лебегу множества.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
       "id": "4019b9cf-106f-4684-9d05-3b688e5920d3",
       "question": "[![Image 31](https://file.notion.so/f/f/4796b420-e0cf-4047-815a-816cf58b2b03/46a743e4-7892-4cef-a945-4dc515204e99/maybe-i-am-the-poop-cat-sad.gif?table=block&id=daf41e69-5b33-47dc-9763-e1bcbdb3d3ec&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&expirationTimestamp=1780344000000&signature=nx9YwdHOt1W8-iu0HWWnXFQqyzriyTxyy6f8UWfA1K4) 27. Сходимость по мере. Теорема Лебега. Примеры.](http://brindle-catcher-367.notion.site/27-daf41e695b3347dc9763e1bcbdb3d3ec?pvs=25)",
-      "answer": "",
+      "answer": "27 Сходимость по мере. Теорема Лебега. Примеры.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
@@ -302,7 +302,32 @@
       "cardId": "1862d7f9-7145-4657-8e43-e01f5f82de4c",
       "level": 1,
       "nextDue": 1780493111296
+    },
+    {
+      "cardId": "1e5d1944-2547-42b5-8819-537fb2506351",
+      "level": 0,
+      "nextDue": 1780406722397
+    },
+    {
+      "cardId": "367e69f3-37d2-4658-b610-714fef9381a8",
+      "level": 1,
+      "nextDue": 1780493124470
+    },
+    {
+      "cardId": "37ebe051-7b26-4ae4-b180-4b651cc1a27c",
+      "level": 0,
+      "nextDue": 1780406736089
+    },
+    {
+      "cardId": "4019b9cf-106f-4684-9d05-3b688e5920d3",
+      "level": 0,
+      "nextDue": 1780406749347
+    },
+    {
+      "cardId": "40d20d95-3c6d-4e4d-9d91-2024ec2acab8",
+      "level": 1,
+      "nextDue": 1780493191739
     }
   ],
-  "exportedAt": "2026-06-01T13:25:21.265Z"
+  "exportedAt": "2026-06-01T13:26:31.746Z"
 }
