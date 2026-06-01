@@ -16,7 +16,7 @@
     {
       "id": "10d17b00-adc8-47df-829f-34d9d9a612e2",
       "question": "[![Image 24](http://brindle-catcher-367.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F4796b420-e0cf-4047-815a-816cf58b2b03%2F4a572845-c7d5-4ef2-ba52-15e05a3d3261%2FHomiakTtsad_004.webp?table=block&id=cf265241-a831-4722-b99b-03840e8e5fd2&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&width=40&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl) 20. Распространение меры.](http://brindle-catcher-367.notion.site/20-cf265241a8314722b99b03840e8e5fd2?pvs=25)",
-      "answer": "",
+      "answer": "20 Распространение меры.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
@@ -28,13 +28,13 @@
     {
       "id": "11ca016f-7828-4d04-bffd-2e2ee6d8f230",
       "question": "[![Image 33](https://file.notion.so/f/f/4796b420-e0cf-4047-815a-816cf58b2b03/4ed99333-0ef7-4f91-bd44-717dafefe8e4/talking-cats-talking.gif?table=block&id=4cdb92cd-e430-403f-9818-d93a0f0eaf64&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&expirationTimestamp=1780344000000&signature=OUhD3XyaeSLwtGx89pCS-vyEpMHW6SowdkxA7Uo9iFo) 29. Теорема об устойчивости сходимости. Регулятор сходимости.](http://brindle-catcher-367.notion.site/29-4cdb92cde430403f9818d93a0f0eaf64?pvs=25)",
-      "answer": "",
+      "answer": "29 Теорема об устойчивости сходимости. Регулятор сходимости.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
       "id": "1324136b-2c66-482b-a70f-7474179c97f0",
       "question": "[![Image 25](http://brindle-catcher-367.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F4796b420-e0cf-4047-815a-816cf58b2b03%2F424ff921-bf40-4b7d-bce0-55b9b0946cab%2FHomiakTtsad_079.webp?table=block&id=df40db08-6638-4ce3-a1c9-f7500c90d8c0&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&width=40&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl) 21. Пар-ды в n-мерном евкл. пр-ве. Объем параллелепипеда и его свойства.](http://brindle-catcher-367.notion.site/21-n-df40db0866384ce3a1c9f7500c90d8c0?pvs=25)",
-      "answer": "",
+      "answer": "21 Пар-ды в n-мерном евкл. пр-ве. Объем параллелепипеда и его свойства.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
@@ -46,7 +46,7 @@
     {
       "id": "1e5d1944-2547-42b5-8819-537fb2506351",
       "question": "[![Image 5](http://brindle-catcher-367.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F4796b420-e0cf-4047-815a-816cf58b2b03%2Fa9a423e6-5993-4845-bd5e-594bc549e7fd%2FHomiakTtsad_014.webp?table=block&id=3cc3c98c-6fe6-4cee-8307-a2d8f0bb68e8&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&width=40&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl) 1. Нормированные пространства. Сходимость в нормированных пространствах.](http://brindle-catcher-367.notion.site/1-3cc3c98c6fe64cee8307a2d8f0bb68e8?pvs=25)",
-      "answer": "",
+      "answer": "1 Нормированные пространства. Сходимость в нормированных пространствах.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
@@ -272,6 +272,37 @@
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     }
   ],
-  "srs": [],
-  "exportedAt": "2026-06-01T13:24:21.265Z"
+  "srs": [
+    {
+      "cardId": "05110c1b-c0a0-42ea-91ee-69f689ca712b",
+      "level": 0,
+      "nextDue": 1780406666404
+    },
+    {
+      "cardId": "10d17b00-adc8-47df-829f-34d9d9a612e2",
+      "level": 0,
+      "nextDue": 1780406679543
+    },
+    {
+      "cardId": "1151fdcd-c10b-40f3-b35b-2f6ff88342e1",
+      "level": 1,
+      "nextDue": 1780493082357
+    },
+    {
+      "cardId": "11ca016f-7828-4d04-bffd-2e2ee6d8f230",
+      "level": 0,
+      "nextDue": 1780406694657
+    },
+    {
+      "cardId": "1324136b-2c66-482b-a70f-7474179c97f0",
+      "level": 0,
+      "nextDue": 1780406709055
+    },
+    {
+      "cardId": "1862d7f9-7145-4657-8e43-e01f5f82de4c",
+      "level": 1,
+      "nextDue": 1780493111296
+    }
+  ],
+  "exportedAt": "2026-06-01T13:25:21.265Z"
 }
