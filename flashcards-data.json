@@ -160,31 +160,31 @@
     {
       "id": "99a6322b-0ee0-4ce2-bef3-6a086b1ade09",
       "question": "[![Image 8](https://file.notion.so/f/f/4796b420-e0cf-4047-815a-816cf58b2b03/8e98ae92-b1bd-46e8-b46a-0fc56c3f87e5/cat1.gif?table=block&id=12d4d219-835c-44df-b705-1d455e2c02c9&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&expirationTimestamp=1780344000000&signature=q_gdHYrw2AtCCmYQo1_kwcp13ycHXFSfUlwCumXLDHs) 4. Задача о нахождении элемента наилучшего приближения. Пример.](http://brindle-catcher-367.notion.site/4-12d4d219835c44dfb7051d455e2c02c9?pvs=25)",
-      "answer": "",
+      "answer": "4 Задача о нахождении элемента наилучшего приближения. Пример.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
       "id": "9dfda972-98f1-41fd-8f16-f3e084de5967",
       "question": "[![Image 22](http://brindle-catcher-367.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F4796b420-e0cf-4047-815a-816cf58b2b03%2F7b9458b5-f5ac-489e-af48-2272eb9b21a8%2FHomiakTtsad_050.webp?table=block&id=97071d7f-33c3-4ae6-8b5d-79be03f76aab&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&width=40&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl) 18. Внешняя мера.](http://brindle-catcher-367.notion.site/18-97071d7f33c34ae68b5d79be03f76aab?pvs=25)",
-      "answer": "",
+      "answer": "18 Внешняя мера.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
       "id": "a0561131-f458-4417-8047-a9a8e2273bd6",
       "question": "[![Image 10](https://file.notion.so/f/f/4796b420-e0cf-4047-815a-816cf58b2b03/59eb09bd-d07c-40b5-9080-1e10cdc790f3/cat-kissing.gif?table=block&id=749ad5a8-7360-4afa-8410-6a5cd5df5771&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&expirationTimestamp=1780344000000&signature=5a54wGRJbKyOByQ1FiltGsK74qvNL2-Cxl7_gyfd4Fc) 6. Евклидово пространство. Гильбертово пространство. Примеры.](http://brindle-catcher-367.notion.site/6-749ad5a873604afa84106a5cd5df5771?pvs=25)",
-      "answer": "",
+      "answer": "6 Евклидово пространство. Гильбертово пространство. Примеры.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
       "id": "a452e145-9506-4b50-a55a-9fb53f9034cd",
       "question": "[![Image 9](https://file.notion.so/f/f/4796b420-e0cf-4047-815a-816cf58b2b03/cadbbf75-f3eb-42a6-9ce8-6769ead3f223/cat-huh.gif?table=block&id=c53ea2d8-8b87-42fd-8369-dd99e802f1f8&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&expirationTimestamp=1780344000000&signature=lndGDG0TgrEyyduSorNjhFVO07_2FDToTWUE5LPzIFg) 5. Пространство со счетным базисом.](http://brindle-catcher-367.notion.site/5-c53ea2d88b8742fd8369dd99e802f1f8?pvs=25)",
-      "answer": "",
+      "answer": "5 Пространство со счетным базисом.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
       "id": "aa63eab6-a2fc-46f6-bc9f-5262ed1de442",
       "question": "[![Image 26](https://file.notion.so/f/f/4796b420-e0cf-4047-815a-816cf58b2b03/61883415-0f9d-4a23-937d-1dda38a7d33a/coquette-hampter.gif?table=block&id=5bfd3fa7-0039-4fe7-9e5d-d3212ec78086&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&expirationTimestamp=1780344000000&signature=TC0TBmLBwJy605UTJg52yqk0XDczohA3mRezdwcELxY) 22. Полукольцо ячеек. Представление откр, мн-ва в виде объединения ячеек.](http://brindle-catcher-367.notion.site/22-5bfd3fa700394fe79e5dd3212ec78086?pvs=25)",
-      "answer": "",
+      "answer": "22 Полукольцо ячеек. Представление откр, мн-ва в виде объединения ячеек.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
@@ -397,7 +397,27 @@
       "cardId": "961ce467-df24-43d5-84c8-d3f501bb9be3",
       "level": 1,
       "nextDue": 1780493313476
+    },
+    {
+      "cardId": "99a6322b-0ee0-4ce2-bef3-6a086b1ade09",
+      "level": 0,
+      "nextDue": 1780406926819
+    },
+    {
+      "cardId": "9dfda972-98f1-41fd-8f16-f3e084de5967",
+      "level": 0,
+      "nextDue": 1780406937187
+    },
+    {
+      "cardId": "a0561131-f458-4417-8047-a9a8e2273bd6",
+      "level": 0,
+      "nextDue": 1780406957017
+    },
+    {
+      "cardId": "a452e145-9506-4b50-a55a-9fb53f9034cd",
+      "level": 0,
+      "nextDue": 1780406968182
     }
   ],
-  "exportedAt": "2026-06-01T13:28:33.481Z"
+  "exportedAt": "2026-06-01T13:29:37.399Z"
 }
