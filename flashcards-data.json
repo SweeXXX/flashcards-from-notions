@@ -190,19 +190,19 @@
     {
       "id": "aab13766-6ff0-4a77-b48d-ba464362af65",
       "question": "[![Image 19](http://brindle-catcher-367.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F4796b420-e0cf-4047-815a-816cf58b2b03%2F0aa07b62-3d1c-4992-8d82-1a8bafc79c48%2FHomiakTtsad_061.webp?table=block&id=88b15240-b312-4424-a711-c7d5a27e29b0&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&width=40&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl) 15. Система мн-в(кольцо, алгебра, $\\sigma$-кольцо, $\\sigma$-алгебра, полукольцо)](http://brindle-catcher-367.notion.site/15-sigma-sigma-88b15240b3124424a711c7d5a27e29b0?pvs=25)",
-      "answer": "",
+      "answer": "15 Система мн-в (кольцо, алгебра, сигма-кольцо, сигма-алгебра, полукольцо).",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
       "id": "b8b9737d-42cb-4d67-aef4-575d768a9e5b",
       "question": "[![Image 23](https://file.notion.so/f/f/4796b420-e0cf-4047-815a-816cf58b2b03/f9636d11-40ad-46e9-96d3-16b1639c1c31/milk-cat-cat.gif?table=block&id=9c9918eb-1ae9-40ab-b957-0c49588bd4a5&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&expirationTimestamp=1780344000000&signature=BHOvC8x8S2GPTTO9sUo8No6km2d7M1ydwyefx1Vu2wY) 19. Построение $\\sigma$-алгебры измеримых мн-в. Св-ва изм.мн-в](http://brindle-catcher-367.notion.site/19-sigma-9c9918eb1ae940abb9570c49588bd4a5?pvs=25)",
-      "answer": "",
+      "answer": "19 Построение сигма-алгебры измеримых мн-в. Св-ва изм. мн-в.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
       "id": "badf8fe5-1270-4cec-b2e5-86aa417975ba",
       "question": "[![Image 13](https://file.notion.so/f/f/4796b420-e0cf-4047-815a-816cf58b2b03/b6a87573-1e66-48bf-972e-f94c6c78f5d1/cats-kitten.gif?table=block&id=172805dd-2a97-497f-8918-047819a1b5d0&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&expirationTimestamp=1780344000000&signature=bHbWGTxb7W7UXFqx-EOQZGl0eOCICNwy_GRmaRwy2uA) 9. Ряды Фурье в гильбертовом подпространстве.](http://brindle-catcher-367.notion.site/9-172805dd2a97497f8918047819a1b5d0?pvs=25)",
-      "answer": "",
+      "answer": "9 Ряды Фурье в гильбертовом подпространстве.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
@@ -417,7 +417,22 @@
       "cardId": "a452e145-9506-4b50-a55a-9fb53f9034cd",
       "level": 0,
       "nextDue": 1780406968182
+    },
+    {
+      "cardId": "aa63eab6-a2fc-46f6-bc9f-5262ed1de442",
+      "level": 0,
+      "nextDue": 1780406984310
+    },
+    {
+      "cardId": "aab13766-6ff0-4a77-b48d-ba464362af65",
+      "level": 0,
+      "nextDue": 1780407014018
+    },
+    {
+      "cardId": "b8b9737d-42cb-4d67-aef4-575d768a9e5b",
+      "level": 0,
+      "nextDue": 1780407034080
     }
   ],
-  "exportedAt": "2026-06-01T13:29:37.399Z"
+  "exportedAt": "2026-06-01T13:30:41.358Z"
 }
