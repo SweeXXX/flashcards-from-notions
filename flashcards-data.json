@@ -118,7 +118,7 @@
     {
       "id": "6cf20746-bd7e-451c-93b3-33ae4515ebec",
       "question": "[![Image 30](http://brindle-catcher-367.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F4796b420-e0cf-4047-815a-816cf58b2b03%2Faa3a0bac-2ffb-4915-8c15-3f2f2f05db35%2FHomiakTtsad_042.webp?table=block&id=ce710a9d-91af-4e58-a6b7-5afd2725819e&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&width=40&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl) 26. Сходимость почти всюду.](http://brindle-catcher-367.notion.site/26-ce710a9d91af4e58a6b75afd2725819e?pvs=25)",
-      "answer": "",
+      "answer": "26 Сходимость почти всюду.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
@@ -136,25 +136,25 @@
     {
       "id": "89d95905-0f85-4fd4-a052-a4dd59304f70",
       "question": "[![Image 18](http://brindle-catcher-367.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F4796b420-e0cf-4047-815a-816cf58b2b03%2F310cf39f-7596-4324-9545-30f8e0140801%2FHomiakTtsad_037.webp?table=block&id=a3accc37-5f4e-487d-ab4e-38dd58e018d3&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&width=40&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl) 14. Теорема единственности.](http://brindle-catcher-367.notion.site/14-a3accc375f4e487dab4e38dd58e018d3?pvs=25)",
-      "answer": "",
+      "answer": "14 Теорема единственности.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
       "id": "8f2508a7-553b-4dc5-88e3-6e0ecd2c1d46",
       "question": "[![Image 21](http://brindle-catcher-367.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F4796b420-e0cf-4047-815a-816cf58b2b03%2F1035f4d1-1077-4b8c-b982-48e9fca50a2f%2FHomiakTtsad_019.webp?table=block&id=f0b0c759-4d77-46e7-a4e0-a4864e32dd6c&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&width=40&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl) 17. Мера и ее свойства.](http://brindle-catcher-367.notion.site/17-f0b0c7594d7746e7a4e0a4864e32dd6c?pvs=25)",
-      "answer": "",
+      "answer": "17 Мера и ее свойства.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
       "id": "918915e3-4268-4cc9-a97d-5ea072c36b46",
       "question": "[![Image 16](http://brindle-catcher-367.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F4796b420-e0cf-4047-815a-816cf58b2b03%2Fb4d1ac06-580f-4b95-af36-4f2047479763%2FHomiakTtsad_016.webp?table=block&id=909b1796-dfcd-40c4-9b66-947065ef8d2c&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&width=40&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl) 12. Условия поточечной сходимости рядов Фурье.](http://brindle-catcher-367.notion.site/12-909b1796dfcd40c49b66947065ef8d2c?pvs=25)",
-      "answer": "",
+      "answer": "12 Условия поточечной сходимости рядов Фурье.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
       "id": "961ce467-df24-43d5-84c8-d3f501bb9be3",
       "question": "![Image 4: Page icon](https://file.notion.so/f/f/4796b420-e0cf-4047-815a-816cf58b2b03/9db12121-c41b-471e-bc97-3941aa2881b2/banana-cat-banana-cat-crying.gif?table=block&id=8b02a191-b4b0-4e96-9f17-95a0d0eed9c0&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&expirationTimestamp=1780344000000&signature=Kp0Y2Ramzxcry3xAYTvPW9DqXSDBWjs9wA_SxPY-s2Y)",
-      "answer": "",
+      "answer": "Картинка",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
@@ -357,7 +357,47 @@
       "cardId": "6b22ea02-6285-4f87-a752-685a32fc9745",
       "level": 1,
       "nextDue": 1780493244113
+    },
+    {
+      "cardId": "6c3621a6-66cc-455e-b661-32b46b0a0541",
+      "level": 0,
+      "nextDue": 1780406853886
+    },
+    {
+      "cardId": "6cf20746-bd7e-451c-93b3-33ae4515ebec",
+      "level": 0,
+      "nextDue": 1780406864035
+    },
+    {
+      "cardId": "70262fe2-bce5-45a1-b8f4-4c4646d6e03d",
+      "level": 1,
+      "nextDue": 1780493266444
+    },
+    {
+      "cardId": "74553b10-66c7-4a30-9340-619c6bf88211",
+      "level": 1,
+      "nextDue": 1780493268061
+    },
+    {
+      "cardId": "89d95905-0f85-4fd4-a052-a4dd59304f70",
+      "level": 0,
+      "nextDue": 1780406880200
+    },
+    {
+      "cardId": "8f2508a7-553b-4dc5-88e3-6e0ecd2c1d46",
+      "level": 0,
+      "nextDue": 1780406890510
+    },
+    {
+      "cardId": "918915e3-4268-4cc9-a97d-5ea072c36b46",
+      "level": 0,
+      "nextDue": 1780406902291
+    },
+    {
+      "cardId": "961ce467-df24-43d5-84c8-d3f501bb9be3",
+      "level": 1,
+      "nextDue": 1780493313476
     }
   ],
-  "exportedAt": "2026-06-01T13:27:32.606Z"
+  "exportedAt": "2026-06-01T13:28:33.481Z"
 }
