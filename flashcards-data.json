@@ -226,13 +226,13 @@
     {
       "id": "c7eb7404-9511-40e8-8bb8-07c1b5020ecc",
       "question": "[![Image 17](https://file.notion.so/f/f/4796b420-e0cf-4047-815a-816cf58b2b03/f7d10937-2f8e-47c4-b7a3-23b0f471b51c/cat-cats.gif?table=block&id=16fec48a-cc90-4cd7-a41d-4b8cb8b7837e&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&expirationTimestamp=1780344000000&signature=ml0t-YboWdvYn2Ike289RNwPobHeF_rSpEyKqY7BAlQ) 13. Неравенство Бесселя для периодических функций. Сходимость по норме ряд ов Фурье периодических функций.](http://brindle-catcher-367.notion.site/13-16fec48acc904cd7a41d4b8cb8b7837e?pvs=25)",
-      "answer": "",
+      "answer": "13 Неравенство Бесселя для периодических функций. Сходимость по норме рядов Фурье периодических функций.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
       "id": "cf7f42be-cf64-41a8-84f4-d6fc17fcac69",
       "question": "[![Image 6](http://brindle-catcher-367.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F4796b420-e0cf-4047-815a-816cf58b2b03%2Fe6b2e651-3d44-4203-bc5f-16bc4ed8ee2a%2FHomiakTtsad_087.webp?table=block&id=b5557498-715b-4767-8097-1c48b2373303&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&width=40&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl) 2. Конечномерные пр-ва. Сходимость по норме и покоординатная сходимость.](http://brindle-catcher-367.notion.site/2-b5557498715b476780971c48b2373303?pvs=25)",
-      "answer": "",
+      "answer": "2 Конечномерные пр-ва. Сходимость по норме и покоординатная сходимость.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
@@ -244,7 +244,7 @@
     {
       "id": "d4793b81-a572-4841-8a25-7b18118a899c",
       "question": "[![Image 11](http://brindle-catcher-367.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F4796b420-e0cf-4047-815a-816cf58b2b03%2Fc5df7154-8952-4ac4-875e-80cecd6f57db%2FHomiakTtsad_013.webp?table=block&id=f1583d49-a19d-4277-ae8f-76f4cf2d90e4&spaceId=4796b420-e0cf-4047-815a-816cf58b2b03&width=40&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl) 7. Ортогональные системы элементов.](http://brindle-catcher-367.notion.site/7-f1583d49a19d4277ae8f76f4cf2d90e4?pvs=25)",
-      "answer": "",
+      "answer": "7 Ортогональные системы элементов.",
       "topic_id": "5f775f36-21fc-42a2-b779-0c8299e3ecf9"
     },
     {
@@ -432,7 +432,42 @@
       "cardId": "b8b9737d-42cb-4d67-aef4-575d768a9e5b",
       "level": 0,
       "nextDue": 1780407034080
+    },
+    {
+      "cardId": "badf8fe5-1270-4cec-b2e5-86aa417975ba",
+      "level": 0,
+      "nextDue": 1780407042396
+    },
+    {
+      "cardId": "bd8dfe81-fff7-4ae0-865a-c362830bb773",
+      "level": 1,
+      "nextDue": 1780493444551
+    },
+    {
+      "cardId": "bf3dc447-2d48-4274-bf43-f641d3bb0f90",
+      "level": 1,
+      "nextDue": 1780493447568
+    },
+    {
+      "cardId": "c45ec206-aa48-46e1-b522-0cae8caf2ddf",
+      "level": 1,
+      "nextDue": 1780493449081
+    },
+    {
+      "cardId": "c7eb7404-9511-40e8-8bb8-07c1b5020ecc",
+      "level": 0,
+      "nextDue": 1780407070556
+    },
+    {
+      "cardId": "cf7f42be-cf64-41a8-84f4-d6fc17fcac69",
+      "level": 0,
+      "nextDue": 1780407091395
+    },
+    {
+      "cardId": "d2d154d9-779e-4c50-84f6-e734de9a947d",
+      "level": 1,
+      "nextDue": 1780493499347
     }
   ],
-  "exportedAt": "2026-06-01T13:30:41.358Z"
+  "exportedAt": "2026-06-01T13:31:50.358Z"
 }
